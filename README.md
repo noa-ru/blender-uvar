@@ -4,8 +4,8 @@ auto reload UV by filechange event
 tested with python 3.6.2 on windows 10
 
 # Dependencies
-watchdog 0.8.3
-pathtools 0.1.2
+* watchdog 0.8.3
+* pathtools 0.1.2
 
 # Installation steps
 * pip3 install watchdog
