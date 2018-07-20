@@ -41,7 +41,6 @@ def debug(msg="", self=None):
 
 
 class UVARModel:
-    registerResetCheckbox = True
     areas = None
     fileWatcherThread = None
 
