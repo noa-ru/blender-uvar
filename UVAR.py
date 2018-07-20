@@ -13,7 +13,7 @@ bl_info = {
     "name": "UV Auto reload",
     "description": "UV auto reload",
     "author": "Oleg Nazarov",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     "blender": (2, 7, 9),
     "location": "UV/Image Editor > Tool Shelf > UV Autoreload",
     "category": "UV",
@@ -41,6 +41,7 @@ def debug(msg="", self=None):
 
 
 class UVARModel:
+    registerResetCheckbox = True
     areas = None
     fileWatcherThread = None
 
@@ -202,9 +203,22 @@ class FileWatcher(FileSystemEventHandler):
         self.observer.join()
         debug("/", self)
 
-    def on_modified(self, event):
+    def on_any_event(self, event):
         debug("", self)
-        if not event.is_directory and event.src_path.endswith(self.file_name):
+        callback = False
+        # some programs make
+        # save name.tmp
+        # rm name
+        # move name.tmp name
+        if not event.is_directory:
+            if event.event_type == 'created' or event.event_type == 'modified':
+                if event.src_path.endswith(self.file_name):
+                    callback = True
+            if event.event_type == 'moved':
+                if event.dest_path.endswith(self.file_name):
+                    callback = True
+
+        if callback:
             debug("callback", self)
             self.callback()
         debug("/", self)
