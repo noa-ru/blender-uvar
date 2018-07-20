@@ -1,7 +1,9 @@
-# Blender-uvar
 auto reload UV by filechange event
 
-tested with python 3.6.2 on windows 10
+tested on:
+* Blender 2.79.b
+* Python 3.6.2 / windows 10
+* Python 3.5.2 / ubuntu 16.04
 
 # Dependencies
 * watchdog 0.8.3
@@ -10,7 +12,7 @@ tested with python 3.6.2 on windows 10
 # Installation steps
 * pip3 install watchdog
 * pip3 install pathtools
-* python -m site
+* python3 -m site
 * find and open %YOUR_PYTHON_PATH%\lib\site-packages
 * copy watchdog, pathtools directory into %YOUR_BLENDER_FOLDER%\%YOUR_BLENDER_VERSION%\python\lib\site-packages
 * install addon in blender preferences
