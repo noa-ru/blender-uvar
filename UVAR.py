@@ -13,7 +13,7 @@ bl_info = {
     "name": "UV Auto reload",
     "description": "UV auto reload",
     "author": "Oleg Nazarov",
-    "version": (1, 0, 1),
+    "version": (1, 0, 2),
     "blender": (2, 7, 9),
     "location": "UV/Image Editor > Tool Shelf > UV Autoreload",
     "category": "UV",
@@ -116,16 +116,16 @@ class UVARModel:
         debug("/", UVARModel)
         return False
 
-    def redraw_handler(self):
+    def redraw_handler(self, file_name):
         debug("", self)
         if self.areas is not None:
             debug("areas is not None", self)
+            bpy.data.images.get(file_name).reload()
             for area in self.areas:
-                if area.type == "IMAGE_EDITOR":
-                    area.spaces.active.image.reload()
+                if area.type == "IMAGE_EDITOR" or area.type == "VIEW_3D":
                     area.tag_redraw()
-                elif area.type == "VIEW_3D":
-                    area.tag_redraw()
+        else:
+            debug("areas is None", self)
         debug("/", self)
 
     def enable(self, areas, image_filepath):
@@ -219,7 +219,7 @@ class FileWatcher(FileSystemEventHandler):
 
         if callback:
             debug("callback", self)
-            self.callback()
+            self.callback(self.file_name)
         debug("/", self)
 
 
@@ -264,6 +264,7 @@ def register():
 def unregister():
     debug()
     bpy.utils.unregister_module(__name__)
+    bpy.types.Scene.UVARModel.disable()
     del bpy.types.WindowManager.UVARPropertyGroup
     del bpy.types.Scene.UVARModel
     debug("/")
